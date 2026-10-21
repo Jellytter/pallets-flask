@@ -1,4 +1,4 @@
-# Glossari tècnic - Pràctica d'Entorns de Desenvolupament
+# Glossari tècnic
 
 ## Àmbit 1: Git/GitHub
 
