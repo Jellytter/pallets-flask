@@ -51,3 +51,29 @@ contribute, including reporting issues, requesting features, asking or answering
 questions, and making PRs.
 
 [contrib]: https://palletsprojects.com/contributing/
+
+
+# F2_T2 - Diagrames de seqüència UML
+
+En aquesta activitat hem representat el procés d'autenticació
+de l'aplicació Flaskr mitjançant diagrames de seqüència UML.
+
+## Flux principal
+
+Representa el procés correcte d'inici de sessió.
+
+![Flux principal](diagrams/Flux%20principal.png)
+
+## Fluxos alternatius
+
+### 1. Camps buits
+
+![Camps buits](diagrams/Alternativa%201.%20Camps%20buits.png)
+
+### 2. Usuari no registrat
+
+![Usuari no registrat](diagrams/Alternativa%202.%20Usuari%20no%20registrat.png)
+
+### 3. Contrasenya incorrecta
+
+![Contrasenya incorrecta](diagrams/Alternativa%203.%20Contrasenya%20incorrecta.png)
