@@ -67,3 +67,31 @@ def test_logout(client, auth):
     with client:
         auth.logout()
         assert "user_id" not in session
+
+# Permet executar el mateix test amb diferents dades.
+@pytest.mark.parametrize(
+    # Definim les dades que utilitzarem en cada prova.
+    ("username", "password", "valid"),
+    (
+        # Prova amb 7 caràcters: no ha de ser acceptada.
+        ("user7", "abc1234", False),
+        # Prova amb 8 caràcters: ha de ser acceptada.
+        ("user8", "abc12345", True),
+        # Prova amb 9 caràcters: ha de ser acceptada.
+        ("user9", "abc123456", True),
+    ),
+)
+# Funció que comprova si la contrasenya té la longitud correcta.
+def test_register_password_length(client, username, password, valid):
+    # Enviem les dades del registre com si fos un usuari.
+    response = client.post(
+        "/auth/register", data={"username": username, "password": password}
+    )
+
+    # Si la contrasenya és correcta, ens ha de portar a la pàgina d'inici de sessió.
+    if valid:
+        assert response.headers["Location"] == "/auth/login"
+    # Si no és correcta, ha de mostrar un missatge d'error.
+    else:
+        assert b"Password must be at least 8 characters long." in response.data
+
