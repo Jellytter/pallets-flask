@@ -10,7 +10,7 @@ def test_register(client, app):
     assert client.get("/auth/register").status_code == 200
 
     # test that successful registration redirects to the login page
-    response = client.post("/auth/register", data={"username": "a", "password": "a"})
+    response = client.post("/auth/register", data={"username": "a", "password": "password123"})
     assert response.headers["Location"] == "/auth/login"
 
     # test that the user was inserted into the database
@@ -26,7 +26,7 @@ def test_register(client, app):
     (
         ("", "", b"Username is required."),
         ("a", "", b"Password is required."),
-        ("test", "test", b"already registered"),
+        ("test", "password123", b"already registered"),
     ),
 )
 def test_register_validate_input(client, username, password, message):
