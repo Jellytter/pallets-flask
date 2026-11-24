@@ -16,6 +16,41 @@ def test_index(client, auth):
     assert b'href="/1/update"' in response.data
 
 
+def test_search(client, app):
+    with app.app_context():
+        db = get_db()
+        db.executemany(
+            "INSERT INTO post (title, body, author_id, created)"
+            " VALUES (?, ?, ?, ?)",
+            [
+                ("Flask title match", "unmatched", 1, "2019-01-01 00:00:00"),
+                ("Recent post", "A FLASK body match", 1, "2020-01-01 00:00:00"),
+            ],
+        )
+        db.commit()
+
+    response = client.get("/?q=fLaSk")
+    assert b"Flask title match" in response.data
+    assert b"Recent post" in response.data
+    assert response.data.index(b"Recent post") < response.data.index(
+        b"Flask title match"
+    )
+    assert b"test title" not in response.data
+
+
+def test_search_no_results(client):
+    response = client.get("/?q=missing")
+    assert b"No posts found." in response.data
+    assert b"test title" not in response.data
+
+
+def test_search_form_on_blog_pages(client, auth):
+    assert b'name="q"' in client.get("/").data
+
+    auth.login()
+    assert b'name="q"' in client.get("/1/update").data
+
+
 @pytest.mark.parametrize("path", ("/create", "/1/update", "/1/delete"))
 def test_login_required(client, path):
     response = client.post(path)

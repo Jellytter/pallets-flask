@@ -8,6 +8,9 @@
 {% endblock %}
 
 {% block content %}
+  {% if not posts and search %}
+    <p>No posts found.</p>
+  {% endif %}
   {% for post in posts %}
     <article class="post">
       <header>
