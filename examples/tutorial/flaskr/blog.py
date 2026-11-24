@@ -15,14 +15,24 @@ bp = Blueprint("blog", __name__)
 
 @bp.route("/")
 def index():
-    """Show all the posts, most recent first."""
+    """Show all or matching posts, most recent first."""
     db = get_db()
+    search = request.args.get("q", "").strip()
     posts = db.execute(
         "SELECT p.id, title, body, created, author_id, username"
         " FROM post p JOIN user u ON p.author_id = u.id"
         " ORDER BY created DESC"
     ).fetchall()
-    return render_template("blog/index.html", posts=posts)
+
+    if search:
+        search = search.casefold()
+        posts = [
+            post
+            for post in posts
+            if search in post["title"].casefold() or search in post["body"].casefold()
+        ]
+
+    return render_template("blog/index.html", posts=posts, search=search)
 
 
 def get_post(id, check_author=True):

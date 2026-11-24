@@ -3,6 +3,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
   <h1><a href="{{ url_for('index') }}">Flaskr</a></h1>
+  <form action="{{ url_for('blog.index') }}" method="get">
+    <label for="search">Search posts</label>
+    <input type="search" id="search" name="q" value="{{ request.args.get('q', '') }}">
+    <input type="submit" value="Search">
+  </form>
   <ul>
     {% if g.user %}
       <li><span>{{ g.user['username'] }}</span>
